@@ -1,0 +1,65 @@
+--Problem Statement
+
+--1) What is the distribution of the total number of air-travelers per year
+
+val input = sc.textFile("file:///home/cloudera/Desktop/Acadgild/Assignment_18_1/S18_Dataset_Holidays.txt")
+
+val dataRDD = input.map(x=> {
+ val sv = x.split(",")
+ val year = sv(5)
+ year
+})
+
+val yearRDD = dataRDD.map(x =>(x,1))
+val finalResult = yearRDD.reduceByKey(_+_).foreach(println)
+
+--2) What is the total air distance covered by each user per year
+
+val input = sc.textFile("file:///home/cloudera/Desktop/Acadgild/Assignment_18_1/S18_Dataset_Holidays.txt")
+
+val dataRDD = input.map(x=> {
+ val sv = x.split(",")
+ val uId = sv(0)
+ val dist = sv(4).toInt
+ val year = sv(5)
+ ((uId,year),dist)
+})
+
+val finalResult = dataRDD.reduceByKey(_+_).foreach(println)
+
+--3) Which user has travelled the largest distance till date
+
+val input = sc.textFile("file:///home/cloudera/Desktop/Acadgild/Assignment_18_1/S18_Dataset_Holidays.txt")
+
+val dataRDD = input.map(x=> {
+ val sv = x.split(",")
+ val uId = sv(0)
+ val dist = sv(4).toInt
+ (uId,dist)
+})
+
+val result = dataRDD.reduceByKey(_+_)
+
+val maxKey = result.sortBy(x => -x._2).first()
+
+println("User ID with maximum Travel:"+ maxKey._1)
+
+--4) What is the most preferred destination for all users.
+
+val input = sc.textFile("file:///home/cloudera/Desktop/Acadgild/Assignment_18_1/S18_Dataset_Holidays.txt")
+
+val dataRDD = input.map(x=> {
+ val sv = x.split(",")
+ val dest = sv(2)
+ dest
+})
+
+val transRDD = dataRDD.map(x=>(x,1))
+
+val result = transRDD.reduceByKey(_+_)
+
+val maxKey = result.sortBy(x => -x._2).first()
+
+println("Most preferred destination:"+ maxKey._1)
+
+
